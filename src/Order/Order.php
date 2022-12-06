@@ -4,6 +4,7 @@ namespace App\Order;
 
 use App\Invoice\InvoiceStrategy;
 use App\Payments\PaymentStrategy;
+use App\Tax\TaxStrategy;
 
 class Order
 {
@@ -11,14 +12,18 @@ class Order
 	protected $email;
 	protected $items;
 	protected $total;
+	protected $totalWithTax;
 	protected $paymentMethod;
 	protected $generator;
+	protected $taxType;
+	protected $isTaxEnabled;
 
 	public function __construct($name, $email, $cart)
 	{
 		$this->name = $name;
 		$this->email = $email;
 		$this->items = $cart->getItems();
+		$this->isTaxEnabled = false;
 		$this->total = $cart->getTotal();
 	}
 
@@ -39,7 +44,30 @@ class Order
 
 	public function getTotal()
 	{
+		if ($this->isTaxEnabled) {
+			if (empty($this->taxType)) {
+				throw new Exception('Invalid Tax Type configuration');
+			}
+
+			$this->totalWithTax = $this->taxType->computeTotalWithTax($this->total);
+			return $this->totalWithTax;
+		}
 		return $this->total;
+	}
+
+	public function enableTax()
+	{
+		$this->isTaxEnabled = true;
+	}
+
+	public function disableTax()
+	{
+		$this->isTaxEnabled = false;
+	}
+
+	public function setTaxType(TaxStrategy $taxType)
+	{
+		$this->taxType = $taxType;
 	}
 
 	public function setPaymentMethod(PaymentStrategy $method)

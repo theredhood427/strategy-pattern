@@ -11,6 +11,8 @@ use App\Invoice\EmailInvoiceStrategy;
 use App\Payments\CashOnDeliveryStrategy;
 use App\Payments\CreditCardStrategy;
 use App\Payments\PaypalStrategy;
+use App\Tax\AustralianTaxStrategy;
+use App\Tax\PhilippinesTaxStrategy;
 
 class Application
 {
@@ -62,5 +64,27 @@ class Application
 		$order->pay();
 
 		echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+		$cod = new CashOnDeliveryStrategy('Jimmy Doe', '123 My Street, Suburb Town', 'Peaceful City', 777, 'Filipinas');
+		// Set Tax
+		$phTaxType = new PhilippinesTaxStrategy();
+		$order->enableTax();
+		$order->setTaxType($phTaxType);
+		$order->setPaymentMethod($cod);
+		$order->pay();
+
+		echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+
+		$cod = new CashOnDeliveryStrategy('Kirsten Michaels', '456 My AU Street, Suburb Town', 'Peaceful City', 777, 'Straya');
+		// Set Tax
+		$phTaxType = new AustralianTaxStrategy();
+		$order->enableTax();
+		$order->setTaxType($phTaxType);
+
+		// Show Invoice
+		$order->setInvoiceGenerator($textInvoice);
+		$order->generateInvoice();
+
+		$order->setPaymentMethod($cod);
+		$order->pay();
 	}
 }
