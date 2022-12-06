@@ -28,19 +28,33 @@ $order = new Order('John Doe', 'johndoe@mail.com', $cart);
 
 echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 $textInvoice = new TextInvoiceStrategy();
-$textInvoice->generate($order);
+$order->setInvoiceGenerator($textInvoice);
+$order->generateInvoice();
+
 echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 $pdfInvoice = new PDFInvoiceStrategy();
-$pdfInvoice->generate($order);
+$order->setInvoiceGenerator($textInvoice);
+$order->generateInvoice();
+
 echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 $emailInvoice = new EmailInvoiceStrategy();
-$emailInvoice->generate($order);
+$order->setInvoiceGenerator($textInvoice);
+$order->generateInvoice();
 
 // Payment
 echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-$cart->pay(new CreditCardStrategy('John Doe', '5432-1234-1231-3234', '331', '12/24'));
+$creditCard = new CreditCardStrategy('John Doe', '5432-1234-1231-3234', '331', '12/24');
+$order->setPaymentMethod($creditCard);
+$order->pay();
+
 echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-$cart->pay(new PaypalStrategy('johndoe@email.com', 'MYSecretPassword$$$'));
+$paypal = new PaypalStrategy('johndoe@email.com', 'MYSecretPassword$$$');
+$order->setPaymentMethod($paypal);
+$order->pay();
+
 echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-$cart->pay(new CashOnDeliveryStrategy('Jane Doe', '123 My Street, Suburb Town', 'Peaceful City', 777, 'Filipinas'));
+$cod = new CashOnDeliveryStrategy('Jane Doe', '123 My Street, Suburb Town', 'Peaceful City', 777, 'Filipinas');
+$order->setPaymentMethod($cod);
+$order->pay();
+
 echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";

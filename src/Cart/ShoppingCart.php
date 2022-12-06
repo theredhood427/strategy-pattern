@@ -30,12 +30,6 @@ class ShoppingCart
 		return $total;
 	}
 
-	public function pay($paymentMethod)
-	{
-		$amount = $this->getTotal();
-		$paymentMethod->pay($amount);
-	}
-
 	public function displayItems()
 	{
 		echo "Shopping Cart Items\n";

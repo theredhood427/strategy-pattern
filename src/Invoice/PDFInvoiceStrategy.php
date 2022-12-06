@@ -18,6 +18,6 @@ class PDFInvoiceStrategy implements InvoiceStrategy
 
 			echo $item->getName() . "\t" . $quantity . "\t" . $item->getPrice() . "\t=\t" . ($quantity * $item->getPrice()) . "\n";
 		}
-		echo "\t\tTotal\t=\t" . $order->getTotal() . "\n\n";
+		echo "\t\tTotal\t=\t" . $order->getTotal() . "\n";
 	}
 }
