@@ -2,6 +2,8 @@
 
 namespace App\Cart;
 
+use App\Cart\Item;
+
 class ShoppingCart
 {
 	protected $items;
@@ -11,7 +13,7 @@ class ShoppingCart
 		$this->items = [];
 	}
 
-	public function addItem($item, $quantity = 1)
+	public function addItem(Item $item, $quantity = 1)
 	{
 		array_push($this->items, [
 			'item' => $item,
@@ -24,7 +26,9 @@ class ShoppingCart
 		$total = 0;
 		foreach ($this->items as $itemData)
 		{
-			$total += $itemData['item']->getPrice() * $itemData['quantity'];
+			$item = $itemData['item'];
+			$quantity = $itemData['quantity'];
+			$total += $item->getPrice() * $quantity;
 		}
 
 		return $total;

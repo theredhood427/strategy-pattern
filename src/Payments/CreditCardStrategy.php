@@ -27,5 +27,6 @@ class CreditCardStrategy implements PaymentStrategy
 		echo "Number: {$this->number} \n";
 		echo "CCV: {$this->ccv} \n";
 		echo "Expiry: {$this->expiry} \n";
+		// Add the code here to interface with CC apps
 	}
 }

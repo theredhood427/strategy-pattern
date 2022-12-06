@@ -3,10 +3,11 @@
 namespace App\Invoice;
 
 use App\Invoice\InvoiceStrategy;
+use App\Order\Order;
 
 class EmailInvoiceStrategy implements InvoiceStrategy
 {
-	public function generate($order)
+	public function generate(Order $order)
 	{
 		echo "SEND THE INVOICE TO CUSTOMER'S EMAIL\n";
 		echo "Customer: {$order->getName()} <{$order->getEmail()}>\n";

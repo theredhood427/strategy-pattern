@@ -2,6 +2,9 @@
 
 require "vendor/autoload.php";
 
-use App\Application;
+// use App\Application;
+use App\Client;
 
-Application::run();
+// Application::run();
+
+Client::run();

@@ -19,5 +19,6 @@ class PaypalStrategy implements PaymentStrategy
 	{
 		echo "Paid an amount of {$amount} using Paypal\n";
 		echo "Paypal Email Account: {$this->email}\n";
+		// Add the code below to pay the amount via Paypal SDK
 	}
 }

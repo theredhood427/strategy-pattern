@@ -2,6 +2,7 @@
 
 namespace App\Order;
 
+use Exception;
 use App\Invoice\InvoiceStrategy;
 use App\Payments\PaymentStrategy;
 use App\Tax\TaxStrategy;
@@ -14,7 +15,7 @@ class Order
 	protected $total;
 	protected $totalWithTax;
 	protected $paymentMethod;
-	protected $generator;
+	protected $invoiceGenerator;
 	protected $taxType;
 	protected $isTaxEnabled;
 
@@ -77,11 +78,19 @@ class Order
 
 	public function pay()
 	{
-		if (empty($this->paymentMethod)) {
-			throw new Exception('Invalid payment method');
+		try {
+			if (empty($this->paymentMethod)) {
+				throw new Exception('Invalid payment method');
+			}
+	
+			$total = $this->total;
+			if ($this->isTaxEnabled) {
+				$total = $this->totalWithTax;
+			}
+			$this->paymentMethod->pay($total);
+		} catch (Exception $e) {
+			error_log($e->getMessage());
 		}
-
-		$this->paymentMethod->pay($this->total);
 	}
 
 	public function setInvoiceGenerator(InvoiceStrategy $generator)
@@ -91,6 +100,13 @@ class Order
 
 	public function generateInvoice()
 	{
-		$this->invoiceGenerator->generate($this);
+		try {
+			if (empty($this->invoiceGenerator)) {
+				throw new Exception("Invoice generator is missing");
+			}
+			$this->invoiceGenerator->generate($this);
+		} catch (Exception $e) {
+			error_log($e->getMessage());
+		}
 	}
 }
