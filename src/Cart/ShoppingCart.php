@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Cart;
+namespace StratPat\Cart;
 
-use App\Cart\Item;
+use StratPat\Cart\Item;
 
 class ShoppingCart
 {

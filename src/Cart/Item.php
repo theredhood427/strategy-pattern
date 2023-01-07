@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Cart;
+namespace StratPat\Cart;
 
 class Item
 {

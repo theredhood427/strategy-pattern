@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Payments;
+namespace StratPat\Payments;
 
 interface PaymentStrategy
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Invoice;
+namespace StratPat\Invoice;
 
-use App\Invoice\InvoiceStrategy;
-use App\Order\Order;
+use StratPat\Invoice\InvoiceStrategy;
+use StratPat\Order\Order;
 
 class TextInvoiceStrategy implements InvoiceStrategy
 {

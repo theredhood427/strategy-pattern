@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Payments;
+namespace StratPat\Payments;
 
-use App\Payments\PaymentStrategy;
+use StratPat\Payments\PaymentStrategy;
 
 class PaypalStrategy implements PaymentStrategy
 {

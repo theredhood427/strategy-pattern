@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Invoice;
+namespace StratPat\Invoice;
 
-use App\Order\Order;
+use StratPat\Order\Order;
 
 interface InvoiceStrategy
 {

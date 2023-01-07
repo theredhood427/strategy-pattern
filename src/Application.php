@@ -1,90 +1,36 @@
 <?php
 
-namespace App;
+namespace StratPat;
 
-use App\Cart\Item;
-use App\Cart\ShoppingCart;
-use App\Order\Order;
-use App\Invoice\TextInvoiceStrategy;
-use App\Invoice\PDFInvoiceStrategy;
-use App\Invoice\EmailInvoiceStrategy;
-use App\Payments\CashOnDeliveryStrategy;
-use App\Payments\CreditCardStrategy;
-use App\Payments\PaypalStrategy;
-use App\Tax\AustralianTaxStrategy;
-use App\Tax\PhilippinesTaxStrategy;
+use StratPat\Cart\Item;
+use StratPat\Cart\ShoppingCart;
+use StratPat\Order\Order;
+use StratPat\Invoice\TextInvoiceStrategy;
+use StratPat\Invoice\PDFInvoiceStrategy;
+use StratPat\Invoice\EmailInvoiceStrategy;
+use StratPat\Payments\CashOnDeliveryStrategy;
+use StratPat\Payments\CreditCardStrategy;
+use StratPat\Payments\PaypalStrategy;
 
 class Application
 {
-	public static function run()
-	{
-		$cart = new ShoppingCart();
-		$apple = new Item('APL', 'Apple', 'An apple fruit', 100);
-		$orange = new Item('ORN', 'Orange', 'An orange fruit', 200);
-		$kiwi = new Item('KIW', 'Kiwi', 'A kiwi fruit', 250);
+    public static function run()
+    {
+        $nike = new Item('NIKE', 'Nike Blazer Mid 77 Jumbo Sneakers' , 8000);
+        $bballshoes = new Item('JORDAN', 'Luka 1 PF' , 6195);
 
-		$cart->addItem($apple, 5);
-		$cart->addItem($orange, 3);
-		$cart->addItem($kiwi, 10);
+        $shopping_cart = new ShoppingCart();
+        $shopping_cart->addItem($nike, 3);
+        $shopping_cart->addItem($bbalshoes, 2);
+        $customer = new Customer('Ron Russelle Bangsil', 'Angeles City Pampanga', 'bangsil.ronrusselle@auf.edu.ph', '2009');
+        $order = new Order($customer, $shopping_cart);
 
-		$cart->displayItems();
+        $invoice = new PDFInvoice();
+        $order->setInvoiceGenerator($invoice);
+        $invoice->generate($order);
 
-		// Generate Invoice
-		$order = new Order('John Doe', 'johndoe@mail.com', $cart);
-
-		echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-		$textInvoice = new TextInvoiceStrategy();
-		$order->setInvoiceGenerator($textInvoice);
-		$order->generateInvoice();
-
-		echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-		$pdfInvoice = new PDFInvoiceStrategy();
-		$order->setInvoiceGenerator($textInvoice);
-		$order->generateInvoice();
-
-		echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-		$emailInvoice = new EmailInvoiceStrategy();
-		$order->setInvoiceGenerator($textInvoice);
-		$order->generateInvoice();
-
-		// Payment
-		echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-		$creditCard = new CreditCardStrategy('John Doe', '5432-1234-1231-3234', '331', '12/24');
-		$order->setPaymentMethod($creditCard);
-		$order->pay();
-
-		echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-		$paypal = new PaypalStrategy('johndoe@email.com', 'MYSecretPassword$$$');
-		$order->setPaymentMethod($paypal);
-		$order->pay();
-
-		echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-		$cod = new CashOnDeliveryStrategy('Jane Doe', '123 My Street, Suburb Town', 'Peaceful City', 777, 'Filipinas');
-		$order->setPaymentMethod($cod);
-		$order->pay();
-
-		echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-		$cod = new CashOnDeliveryStrategy('Jimmy Doe', '123 My Street, Suburb Town', 'Peaceful City', 777, 'Filipinas');
-		// Set Tax
-		$phTaxType = new PhilippinesTaxStrategy();
-		$order->enableTax();
-		$order->setTaxType($phTaxType);
-		$order->setPaymentMethod($cod);
-		$order->pay();
-
-		echo "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-
-		$cod = new CashOnDeliveryStrategy('Kirsten Michaels', '456 My AU Street, Suburb Town', 'Peaceful City', 777, 'Straya');
-		// Set Tax
-		$phTaxType = new AustralianTaxStrategy();
-		$order->enableTax();
-		$order->setTaxType($phTaxType);
-
-		// Show Invoice
-		$order->setInvoiceGenerator($textInvoice);
-		$order->generateInvoice();
-
-		$order->setPaymentMethod($cod);
-		$order->pay();
-	}
+        $payment = new PaypalPayment('bangsil.ronrusselle@email.paypal.ph', 'secretpassword');
+        $order->setPaymentMethod($payment);
+        $order->payInvoice();
+    }
 }
