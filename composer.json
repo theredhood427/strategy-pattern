@@ -2,7 +2,7 @@
     "name": "design-pattern/strategy",
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "StratPat\\": "src/"
         }
     },
     "require": {}

@@ -3,8 +3,8 @@
 require "vendor/autoload.php";
 
 // use App\Application;
-use App\Client;
+use StratPat\Application;
 
 // Application::run();
 
-Client::run();
+Application::run();

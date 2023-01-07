@@ -7,7 +7,7 @@ use StratPat\Cart\ShoppingCart;
 use StratPat\Order\Order;
 use StratPat\Invoice\TextInvoiceStrategy;
 use StratPat\Invoice\PDFInvoiceStrategy;
-use StratPat\Invoice\EmailInvoiceStrategy;
+use StratPat\Customer\Customer;
 use StratPat\Payments\CashOnDeliveryStrategy;
 use StratPat\Payments\CreditCardStrategy;
 use StratPat\Payments\PaypalStrategy;
@@ -21,15 +21,15 @@ class Application
 
         $shopping_cart = new ShoppingCart();
         $shopping_cart->addItem($nike, 3);
-        $shopping_cart->addItem($bbalshoes, 2);
-        $customer = new Customer('Ron Russelle Bangsil', 'Angeles City Pampanga', 'bangsil.ronrusselle@auf.edu.ph', '2009');
+        $shopping_cart->addItem($bballshoes, 2);
+        $customer = new Customer('Ron Russelle Bangsil', 'Angeles City Pampanga', 'bangsil.ronrusselle@auf.edu.ph');
         $order = new Order($customer, $shopping_cart);
 
-        $invoice = new PDFInvoice();
+        $invoice = new PDFInvoiceStrategy();
         $order->setInvoiceGenerator($invoice);
         $invoice->generate($order);
 
-        $payment = new PaypalPayment('bangsil.ronrusselle@email.paypal.ph', 'secretpassword');
+        $payment = new PaypalStrategy('bangsil.ronrusselle@email.paypal.ph', 'secretpassword');
         $order->setPaymentMethod($payment);
         $order->payInvoice();
     }
